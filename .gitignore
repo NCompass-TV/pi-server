@@ -45,5 +45,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-# api/db/_data.db
+api/db/_data.db
 *Db.*
