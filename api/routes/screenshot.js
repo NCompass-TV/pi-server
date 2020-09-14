@@ -56,7 +56,7 @@ console.log('DELETING')
 const screenShot = () => {
 	console.log('SCREENSHOT')
     return new Promise((resolve, reject) => {
-        exec(`scrot -u -q 10 ${sc_path}/%Y_%m_%d--%H_%M_%S.png`, (err, stdout, stderr) => {
+        exec(`scrot -q 50 ${sc_path}/%Y_%m_%d--%H_%M_%S.jpg`, (err, stdout, stderr) => {
             if (err) {
               reject(err)
             }
