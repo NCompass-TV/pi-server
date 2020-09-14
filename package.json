@@ -1,0 +1,31 @@
+{
+	"name": "server",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js",
+		"dev": "nodemon app.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"async": "^3.2.0",
+		"axios": "^0.19.2",
+		"body-parser": "^1.19.0",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"download-file": "^0.1.5",
+		"express": "^4.17.1",
+		"form-data": "^3.0.0",
+		"kafka-node": "^5.0.0",
+		"moment": "^2.27.0",
+		"moment-timezone": "^0.5.31",
+		"socket.io": "^2.3.0",
+		"socket.io-client": "^2.3.0",
+		"sqlite3": "^4.2.0",
+		"sqlstring-sqlite": "^0.1.1",
+		"systeminformation": "^4.26.10"
+	}
+}
