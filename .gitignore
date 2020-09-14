@@ -6,7 +6,7 @@
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
-/public/*
+#/public/*
 
 # dependencies
 /node_modules
@@ -45,5 +45,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-api/db/_data.db
+#api/db/_data.db
 *Db.*
