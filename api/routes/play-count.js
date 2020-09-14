@@ -7,7 +7,7 @@ const router = express.Router();
 const sqlstring = require('sqlstring-sqlite');
 const kafka = require('kafka-node');
 const Producer = kafka.Producer;
-const client = new kafka.KafkaClient({kafkaHost: 'n-compass.online:9092'});
+const client = new kafka.KafkaClient({kafkaHost: '3.212.225.229:9092'});
 const producer = new Producer(client);
 let broker_status_healthy = true;
 
