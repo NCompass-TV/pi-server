@@ -6,6 +6,7 @@ echo 'Starting Update Process, Please make sure Pi is connected to the internet 
 sleep 5;
 pm2 stop all;
 echo '=======================Updating the Pi Server=========================';
+echo 'Creating backup ...';
 cd /home/pi/n-compasstv/pi-server;
 mkdir /home/pi/n-compasstv/backup;
 cp -R /home/pi/n-compasstv/pi-server/public /home/pi/n-compasstv/backup;
