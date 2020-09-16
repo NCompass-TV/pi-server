@@ -7,7 +7,6 @@ const sqlstring = require('sqlstring-sqlite');
 
 router.post('', async(req, res) => {
     try {
-		// console.log('#PlayerData', req.body);
         const saved_data = [];
         saved_data.push(await fetchAndSaveContent(req.body.piContents.contents));
 		saved_data.push(await fetchAndSaveZones(req.body.piContents.screenZonePlaylistsContents));
@@ -46,24 +45,24 @@ const fetchAndSaveContent = data => {
     })
 }
 
-// Optimize this future dev :)
+// (2020) Optimize this future dev :)
 const fetchAndSaveZones = (data) => {
-	// console.log('#fetchAndSaveZones', data);
     return new Promise((resolve, reject) => {
         data.forEach(item => {
             let sequence = 1;
             const zone = item.screenTemplateZonePlaylist;
             const contents = item.contents;
-			let sql = `INSERT INTO template_zones (template_id, x_pos, y_pos, height, width, screen_id, playlist_id, playlist_type, zone_order) 
+			let sql = `INSERT INTO template_zones (template_id, x_pos, y_pos, height, width, screen_id, background, playlist_id, playlist_type, zone_order) 
 			VALUES 
 			(${sqlstring.escape(zone.templateId)}, 
-			${sqlstring.escape(zone.xPos)}, 
-			${sqlstring.escape(zone.yPos)}, 
-			${sqlstring.escape(zone.height)}, 
+			${sqlstring.escape(zone.xPos)},
+			${sqlstring.escape(zone.yPos)},
+			${sqlstring.escape(zone.height)},
 			${sqlstring.escape(zone.width)}, 
-			${sqlstring.escape(zone.screenId)}, 
-			${sqlstring.escape(zone.playlistId)}, 
-			${sqlstring.escape(zone.playlistType)}, 
+			${sqlstring.escape(zone.screenId)},
+			${sqlstring.escape(zone.background)},
+			${sqlstring.escape(zone.playlistId)},
+			${sqlstring.escape(zone.playlistType)},
 			${sqlstring.escape(zone.order)});`;
 
             db.all(sql, (err, rows) => {
@@ -114,7 +113,6 @@ const saveHostInfo = async (data, timezone) => {
 
 // Save Playlist Data
 const savePlaylistData = (zone_playlist_id, content, sequence) => {
-    // console.log(`${sequence} == id: ${zone_playlist_id} === content: ${content.fileName}`);
     return new Promise((resolve, reject) => {
 		let content_sql = `INSERT INTO playlist_contents (playlist_id, content_id, file_name, url, file_type, handler_id, sequence, is_fullscreen, duration) VALUES 
 		(${sqlstring.escape(zone_playlist_id)}, 

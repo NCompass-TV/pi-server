@@ -7,6 +7,7 @@ sleep 5;
 pm2 stop all;
 echo '=======================Updating the Pi Server=========================';
 cd /home/pi/n-compasstv/pi-server;
+git reset --hard;
 git pull;
 npm install;
 echo '=======================Updating the Pi Electron=======================';

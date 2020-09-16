@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const db = require('../db/db_conf');
 const body = require('body-parser');
@@ -7,7 +8,7 @@ const router = express.Router();
 const sqlstring = require('sqlstring-sqlite');
 const kafka = require('kafka-node');
 const Producer = kafka.Producer;
-const client = new kafka.KafkaClient({kafkaHost: 'n-compass.online:9092'});
+const client = new kafka.KafkaClient({kafkaHost: process.env.KAFKAHOST});
 const producer = new Producer(client);
 let broker_status_healthy = true;
 
@@ -38,18 +39,34 @@ router.post('', async(req, res) => {
     }
 })
 
+const sendLogsOverSocket = async (data) => {
+    try {
+        if (broker_status_healthy == true) {
+            await sendToBroker(data);
+        } else {
+            console.log('Saved unsent log to database:', data)
+            await contentPlayCount(data.license_id, data.content_id, data.timestap);
+        }
+
+        play_log_data = data;
+        return ({data_saved: true});
+    } catch(error) {
+        console.log(error);
+    }
+} 
+
 const sendToBroker = async (count) => {
-    const payloads = [
-        { topic: 'contentPlayCount', messages:JSON.stringify(count.body) , partition: 0 }
+    const payload = [
+        { topic: 'contentPlayCount', messages:JSON.stringify(count) , partition: 0 }
     ];
 
-    producer.send(payloads, async (err, data) => {
+    producer.send(payload, async (err, data) => {
         if (err) {
 			console.log('Unable to send data to broker:', err);
-			await contentPlayCount(count.body.license_id, count.body.content_id, count.body.timestap);
-			console.log('Saved unsent log to database:', count.body)
+			await contentPlayCount(data.license_id, data.content_id, data.timestap);
+			console.log('Saved unsent log to database:', data)
 		} else {
-			console.log('Play log sent to broker:', count.body);
+			console.log('Play log sent to broker:', data);
 		}
 	});
 }
@@ -73,7 +90,6 @@ const contentPlayCount = (license_id, content_id, date) => {
 }
 
 // Beyond this point are unused functions, but will be used in the future.
-
 const getUnsentLogs = () => {
     return new Promise((resolve, reject) => {
         let sql = `SELECT * FROM content_play_log WHERE is_sent IS NULL`;
@@ -159,5 +175,6 @@ const deleteSentLog = id => {
 
 module.exports = {
     router: router,
+    sendLogsOverSocket: sendLogsOverSocket,
     sendContentLogs: sendContentLogs
 };
