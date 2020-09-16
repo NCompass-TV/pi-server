@@ -16,6 +16,7 @@ npm install;
 yes | cp -rf /home/pi/n-compasstv/backup/public /home/pi/n-compasstv/pi-server;
 yes | cp -rf /home/pi/n-compasstv/backup/_data.db /home/pi/n-compasstv/pi-server/api/db;
 rm -rf /home/pi/n-compasstv/backup;
+sudo chmod -R 777 /home/pi/n-compasstv;
 echo '=======================Updating the Pi Electron=======================';
 cd /home/pi/n-compasstv/pi-electron;
 git pull;
