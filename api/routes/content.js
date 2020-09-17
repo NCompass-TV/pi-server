@@ -56,6 +56,22 @@ router.get('/reset', async(req, res) => {
     }
 })
 
+router.get('/refetch', async(req, res) => {
+    try {
+        let contentTbl = await clearContentTbl();
+        let playlistContentTbl = await clearPlaylistContentTbl();
+		let templateZonesTbl = await clearTemplateZonesTbl();
+		let hostInfoTbl = await clearHostInfoTbl();
+		let contentLogs = await clearContentPlayLogsTbl();
+        await clearDir();
+        console.log('Database Cleared', contentTbl, playlistContentTbl, templateZonesTbl, hostInfoTbl, contentLogs);
+        res.json('Pi Data Refetched Successfully');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('#refetch - Something went wrong');
+    }
+})
+
 const clearContentTbl = () => {
     return new Promise((resolve, reject) => {
         let sql = `DELETE FROM contents;`;
@@ -141,14 +157,20 @@ const clearDir = () => {
                 reject();   
                 throw err;
             }
+
+            let file_total = files.length;
+            let file_deleted = 0; 
+
             for (const file of files) {
-              fs.unlink(path.join(path_uri, file), err => {
-                reject();
-                if (err) throw err;
-              });
+                file_deleted++;
+                fs.unlinkSync(path.join(path_uri, file))
+
+                if (file_deleted == file_total) {
+                    console.log('All Assets Deleted');
+                    resolve();
+                }
             }
         });
-        resolve();
     })
 }
 
