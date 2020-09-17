@@ -141,14 +141,20 @@ const clearDir = () => {
                 reject();   
                 throw err;
             }
+
+            let file_total = files.length;
+            let file_deleted = 0; 
+
             for (const file of files) {
-              fs.unlink(path.join(path_uri, file), err => {
-                reject();
-                if (err) throw err;
-              });
+                file_deleted++;
+                fs.unlinkSync(path.join(path_uri, file))
+
+                if (file_deleted == file_total) {
+                    console.log('All Assets Deleted');
+                    resolve();
+                }
             }
         });
-        resolve();
     })
 }
 
