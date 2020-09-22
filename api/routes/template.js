@@ -5,7 +5,6 @@ const db = require('../db/db_conf');
 router.get('', async (req, res) => {
     try {
         res.json(await getTemplate());
-        db.close();
     } catch(error) {
         console.log(error);
         res.status(500).send('#getContent - Something went wrong');
