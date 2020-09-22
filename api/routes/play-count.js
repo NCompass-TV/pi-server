@@ -46,7 +46,6 @@ const sendLogsOverSocket = async (data) => {
         } else {
             console.log('Saved unsent log to database:', data)
             await contentPlayCount(data.license_id, data.content_id, data.timestap);
-            db.close();
         }
 
         play_log_data = data;

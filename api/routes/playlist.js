@@ -5,7 +5,6 @@ const db = require('../db/db_conf');
 router.get('/:id', async (req, res) => {
     try {
         res.json(await getPlaylistSequence(req.params));
-        db.close();
     } catch(error) {
         console.log(error);
         res.status(500).send('#getPlaylistSequence - Something went wrong');
@@ -15,7 +14,6 @@ router.get('/:id', async (req, res) => {
 router.get('/type/:id', async(req, res) => {
     try {   
         res.json(await getPlaylistType(req.params));
-        db.close();
     } catch(error) {
         console.log(error);
         res.status(500).send('#getPlaylistType - Something went wrong.');
