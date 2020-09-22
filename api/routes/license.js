@@ -13,7 +13,6 @@ router.post('/save-license', async (req, res) => {
         await clearLicenseDb();
 		const saved_license = await saveLicense(req.body.license_id, req.body.license_key, socket_server);
         await createConfig(saved_license);
-        db.close();
         res.send(true);
     } catch (error) {
         console.log(error)
@@ -24,7 +23,6 @@ router.post('/save-license', async (req, res) => {
 router.get('/get-license', async (req, res) => {
     try {
         const license_key = await getLicense();
-        db.close();
         console.log(license_key);
         res.json(license_key);
     } catch (error) {

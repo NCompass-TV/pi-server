@@ -32,7 +32,6 @@ router.get('/cleardb', async(req, res) => {
 		`Template Zones Table: ${templateZonesTbl}\n`, 
 		`Host Info Table${hostInfoTbl}\n`);
         res.json('Database Cleared');
-        db.close();
     } catch(error) {
         console.log('#r_cleardb', error);
         res.status(500).send(`#ClearDB Route Error: ${error}`);
@@ -51,7 +50,6 @@ router.get('/reset', async(req, res) => {
         await clearDir();
         console.log('Database Cleared', contentTbl, licenseTbl, playlistContentTbl, templateZonesTbl, hostInfoTbl, contentLogs, config);
         res.json('Pi Reset Successfully');
-        db.close();
     } catch (error) {
         console.log('#r_reset',error);
         res.status(500).send(`#Reset Route Error: ${error}`);
@@ -68,7 +66,6 @@ router.get('/refetch', async(req, res) => {
         await clearDir();
         console.log('Database Cleared', contentTbl, playlistContentTbl, templateZonesTbl, hostInfoTbl, contentLogs);
         res.json('Pi Data Refetched Successfully');
-        db.close();
     } catch (error) {
         console.log(error);
         res.status(500).send('#refetch - Something went wrong');
