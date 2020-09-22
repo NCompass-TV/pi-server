@@ -12,22 +12,24 @@ router.post('/save-license', async (req, res) => {
         console.log('LICENSE', req.body.license_id, req.body.license_key);
         await clearLicenseDb();
 		const saved_license = await saveLicense(req.body.license_id, req.body.license_key, socket_server);
-		await createConfig(saved_license);
+        await createConfig(saved_license);
+        db.close();
         res.send(true);
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: 'Internal Error' });
+        res.status(500).send({ error: error });
     }
 })
 
 router.get('/get-license', async (req, res) => {
     try {
         const license_key = await getLicense();
+        db.close();
         console.log(license_key);
         res.json(license_key);
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: 'Internal Error' });
+        res.status(500).send({ error: error });
     }
 })
 
@@ -47,7 +49,6 @@ const clearLicenseDb = () => {
 const saveLicense = (id, key, socket_server) => {
     return new Promise((resolve, reject) => {
 		let sql = `INSERT INTO license (license_id, license_key) VALUES (${sqlstring.escape(id)}, ${sqlstring.escape(key)})`;
-		
         db.all(sql, (err, rows) => {
             if (err) {
                 console.log(err);
