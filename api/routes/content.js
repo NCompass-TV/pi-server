@@ -33,8 +33,8 @@ router.get('/cleardb', async(req, res) => {
 		`Host Info Table${hostInfoTbl}\n`);
         res.json('Database Cleared');
     } catch(error) {
-        console.log(error);
-        res.status(500).send('#clearDatabase - Something went wrong');
+        console.log('#r_cleardb', error);
+        res.status(500).send(`#ClearDB Route Error: ${error}`);
     }
 })
 
@@ -51,8 +51,8 @@ router.get('/reset', async(req, res) => {
         console.log('Database Cleared', contentTbl, licenseTbl, playlistContentTbl, templateZonesTbl, hostInfoTbl, contentLogs, config);
         res.json('Pi Reset Successfully');
     } catch (error) {
-        console.log(error);
-        res.status(500).send('#clearDatabase - Something went wrong');
+        console.log('#r_reset',error);
+        res.status(500).send(`#Reset Route Error: ${error}`);
     }
 })
 
@@ -77,7 +77,8 @@ const clearContentTbl = () => {
         let sql = `DELETE FROM contents;`;
         db.all(sql, (err, rows) => {
             if(err) {
-                reject();
+                console.log('#clearContentTbl', err)
+                reject(err);
             } else {
                 resolve(rows); 
             }
@@ -90,7 +91,8 @@ const clearLicenseTbl = () => {
         let sql = `DELETE FROM license;`;
         db.all(sql, (err, rows) => {
             if (err) {
-                reject();
+                console.log('#clearLicenseTbl', err)
+                reject(err);
             } else {
                 resolve(rows);
             }
@@ -103,7 +105,8 @@ const clearPlaylistContentTbl = () => {
         let sql = `DELETE FROM playlist_contents;`
         db.all(sql, (err, rows) => {
             if(err) {
-                reject();
+                console.log('#clearPlaylistContentTbl', err)
+                reject(err);
             } else {
                 resolve(rows);
             }
@@ -116,7 +119,8 @@ const clearTemplateZonesTbl = () => {
         let sql = `DELETE FROM template_zones`;
         db.all(sql, (err, rows) => {
             if(err) {
-                reject();
+                console.log('#clearTemplateZonesTbl', err);
+                reject(err);
             } else {
                 resolve(rows);
             }
@@ -129,6 +133,7 @@ const clearContentPlayLogsTbl = () => {
 		let sql = `DELETE FROM content_play_log`
 		db.all(sql, (err, rows) => {
 			if (err) {
+                console.log('#clearContentPlayLogsTbl', err)
 				reject(err);
 			} else {
 				resolve(rows);
@@ -142,6 +147,7 @@ const clearHostInfoTbl = () => {
 		let sql = `DELETE FROM host_info`
 		db.all(sql, (err, rows) => {
 			if (err) {
+                console.log('#clearHostInfoTbl', err);
 				reject(err);
 			} else {
 				resolve(rows);
@@ -154,7 +160,8 @@ const clearDir = () => {
     return new Promise((resolve, reject) => {
         fs.readdir(path_uri, (err, files) => {
             if (err) {
-                reject();   
+                console.log('#clearDir', err);
+                reject(err);   
                 throw err;
             }
 
@@ -210,6 +217,7 @@ const downloadContent = (content, io) => {
                             // Incase of errors.
                             console.log(err)
                         }
+
                         download_counter++;
                         // console.log('File Downloaded', element.file_name);
                         io.emit('downloaded_content', download_counter);
@@ -222,7 +230,6 @@ const downloadContent = (content, io) => {
                     }
                 }
             })
-            // console.log('Files already exist', element.file_name);
         }, err => {
             console.log('error', err);
             console.log('Done');
@@ -237,7 +244,7 @@ const deleteConfigFile = () => {
 		const path = '../config.json';
 		fs.unlink(path, (err) => {
 			if (err) {
-				// If error continue
+				console.log('#deleteConfigFile', err)
 				resolve(false);
 			} else {
 				resolve(true);
