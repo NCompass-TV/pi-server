@@ -6,6 +6,8 @@ const download = require('download-file');
 const db = require('../db/db_conf');
 const path = require('path');
 const path_uri = './public/assets';
+const exec = require('child_process').exec;
+const shelljs = require('shelljs');
 
 router.get('', async (req, res) => {
     try {
@@ -35,6 +37,8 @@ router.get('/cleardb', async(req, res) => {
     } catch(error) {
         console.log('#r_cleardb', error);
         res.status(500).send(`#ClearDB Route Error: ${error}`);
+        await getBackupDatabase();
+        await restartPlayer();
     }
 })
 
@@ -53,6 +57,8 @@ router.get('/reset', async(req, res) => {
     } catch (error) {
         console.log('#r_reset',error);
         res.status(500).send(`#Reset Route Error: ${error}`);
+        await getBackupDatabase();
+        await restartPlayer();
     }
 })
 
@@ -69,8 +75,46 @@ router.get('/refetch', async(req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send('#refetch - Something went wrong');
+        await getBackupDatabase();
+        await restartPlayer();
     }
 })
+
+const getBackupDatabase = () => {
+    return new Promise((resolve, reject) => {
+        exec(`yes | cp -rf /home/ubuntu/n-compasstv/db_backup_dirty/_data.db /home/ubuntu/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
+            if (err) {
+				console.log(err)
+				reject(err)
+			}
+			
+            resolve('Database Rescued');
+        });
+    })
+}
+
+const restartPlayer = () => {
+    console.log('Restarting Player')
+
+    return new Promise((resolve, reject) => {
+        shelljs.exec(`pm2 restart app`, (err, stdout, stderr) => {
+            if (err) {
+				console.log(err)
+				reject(err)
+            }
+        });
+
+        shelljs.exec(`pm2 restart npm`, (err, stdout, stderr) => {
+            if (err) {
+				console.log(err)
+				reject(err)
+            }
+            
+        });
+
+        resolve("Restarting")
+    })
+}
 
 const clearContentTbl = () => {
     return new Promise((resolve, reject) => {

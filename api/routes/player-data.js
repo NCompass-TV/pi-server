@@ -11,7 +11,8 @@ router.post('', async(req, res) => {
         saved_data.push(await fetchAndSaveContent(req.body.piContents.contents));
 		saved_data.push(await fetchAndSaveZones(req.body.piContents.screenZonePlaylistsContents));
 		saved_data.push(await saveHostInfo(req.body.piContents.host, req.body.piContents.timezone));
-		backupDatabase();
+		const backup_result = await backupDatabase();
+		console.log(backup_result)
         res.json({data_saved: true});
     } catch(error) {
         console.log('Error on /save-data: \n * License is not activated \n * License does not exist \n * License is not assigned ', error);
