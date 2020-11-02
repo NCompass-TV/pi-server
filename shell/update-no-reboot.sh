@@ -15,8 +15,7 @@ cp /home/ubuntu/n-compasstv/pi-server/api/db/_data.db /home/ubuntu/n-compasstv/b
 git reset --hard;
 git pull;
 npm install;
-cp /home/ubuntu/n-compasstv/pi-server/api/db/_data.db /home/ubuntu/n-compasstv/db_backup_clean;
-yes | cp -rf /home/ubuntu/n-compasstv/pi-server/api/db/_data.db /home/ubuntu/n-compasstv/db_backup/clean;
+yes | cp -rf /home/ubuntu/n-compasstv/pi-server/api/db/_data.db /home/ubuntu/n-compasstv/db_backup_clean;
 yes | cp -rf /home/ubuntu/n-compasstv/backup/public /home/ubuntu/n-compasstv/pi-server;
 yes | cp -rf /home/ubuntu/n-compasstv/backup/_data.db /home/ubuntu/n-compasstv/pi-server/api/db;
 rm -rf /home/ubuntu/n-compasstv/backup;
