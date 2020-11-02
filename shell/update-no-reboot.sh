@@ -9,7 +9,7 @@ echo '=======================Updating the Pi Server=========================';
 echo 'Creating backup ...';
 cd /home/ubuntu/n-compasstv/pi-server;
 mkdir /home/ubuntu/n-compasstv/backup;
-mkdir /home/ubuntu/n-compasstv/db_backup/clean;
+mkdir /home/ubuntu/n-compasstv/db_backup_clean;
 cp -R /home/ubuntu/n-compasstv/pi-server/public /home/ubuntu/n-compasstv/backup;
 cp /home/ubuntu/n-compasstv/pi-server/api/db/_data.db /home/ubuntu/n-compasstv/backup;
 git reset --hard;
