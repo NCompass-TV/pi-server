@@ -10,9 +10,26 @@ sudo npm install -g npm;
 echo '=======================Updating the Pi Server=========================';
 echo 'Creating backup ...';
 cd /home/pi/n-compasstv/pi-server;
-mkdir /home/pi/n-compasstv/backup;
-mkdir /home/pi/n-compasstv/db_backup_dirty;
-mkdir /home/pi/n-compasstv/db_backup_clean;
+if [-d /backup]
+then
+	echo "Backup Folder is Present"
+else
+	mkdir /home/pi/n-compasstv/backup;
+fi
+
+if [-d /backup]
+then
+	echo "DB Dirty Folder is Present"
+else
+	mkdir /home/pi/n-compasstv/db_backup_dirty;
+fi
+
+if [-d /backup]
+then
+	echo "DB Clean Folder is Present"
+else
+	mkdir /home/pi/n-compasstv/db_backup_clean;
+fi
 cp -R /home/pi/n-compasstv/pi-server/public /home/pi/n-compasstv/backup;
 cp /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/backup;
 git reset --hard;
