@@ -34,14 +34,15 @@ else
 	mkdir /home/pi/n-compasstv/db_backup_clean;
 fi
 
-echo 'Creating backup, This may take a while ...';
-
+echo 'Creating Pi Server Backup, This may take a while depending on the number of content in this player . . .';
 cp -R /home/pi/n-compasstv/pi-server/public /home/pi/n-compasstv/backup;
 cp /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/backup;
 git reset --hard;
 git pull;
 npm install;
 npm update;
+
+echo 'Restoring Pi Server Backup, Please Wait . . .';
 yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_clean;
 yes | cp -rf /home/pi/n-compasstv/backup/public /home/pi/n-compasstv/pi-server;
 yes | cp -rf /home/pi/n-compasstv/backup/_data.db /home/pi/n-compasstv/pi-server/api/db;
@@ -49,6 +50,5 @@ rm -rf /home/pi/n-compasstv/backup;
 sudo chmod -R 777 /home/pi/n-compasstv;
 sudo chmod -R 777 /home/pi/n-compasstv/pi-server/api/db/_data.db;
 
-echo '=======================Running Update=========================';
 cd /home/pi/n-compasstv/pi-server/shell
 ./update-no-reboot.sh
