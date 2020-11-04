@@ -30,6 +30,8 @@ npm install;
 echo '=======================Updating the Pi Player=========================';
 cd /var/www/html;
 git pull;
+echo '=======================Finishing Touch, Hold on=========================';
+sudo sed -i -e '$aavoid_warnings=1' /boot/config.txt
 echo 'Update Finished! Player Starting';
 sleep 1;
 echo '5';
