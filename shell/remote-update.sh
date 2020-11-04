@@ -16,6 +16,7 @@ cp /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/backup;
 git reset --hard;
 git pull;
 npm install;
+npm update;
 yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_clean;
 yes | cp -rf /home/pi/n-compasstv/backup/public /home/pi/n-compasstv/pi-server;
 yes | cp -rf /home/pi/n-compasstv/backup/_data.db /home/pi/n-compasstv/pi-server/api/db;
@@ -25,11 +26,17 @@ echo '=======================Updating the Pi Electron=======================';
 cd /home/pi/n-compasstv/pi-electron;
 git pull;
 npm install;
+npm update;
 echo '=======================Updating the Pi Player=========================';
 cd /var/www/html;
 git pull;
 echo '=======================Finishing Touch, Hold on=========================';
-sudo sed -i -e '$aavoid_warnings=1' /boot/config.txt
+if grep -Fxq "avoid_warnings=1" /boot/config.txt
+then 
+	echo "avoid_warnings already set to 1"
+else
+	sudo sed -i -e '$aavoid_warnings=1' /boot/config.txt
+fi
 echo 'Update Finished! Pi will now reboot';
 sleep 1;
 echo '5';
