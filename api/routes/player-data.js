@@ -11,15 +11,26 @@ router.post('', async(req, res) => {
         saved_data.push(await fetchAndSaveContent(req.body.piContents.contents));
 		saved_data.push(await fetchAndSaveZones(req.body.piContents.screenZonePlaylistsContents));
 		saved_data.push(await saveHostInfo(req.body.piContents.host, req.body.piContents.timezone));
+		const backup_result = await backupDatabase();
+		console.log(backup_result)
         res.json({data_saved: true});
     } catch(error) {
         console.log('Error on /save-data: \n * License is not activated \n * License does not exist \n * License is not assigned ', error);
     }
 })
 
-router.get('/content-play-count', (req, res) => {
-    res.send('Hello')
-})
+const backupDatabase = () => {
+	return new Promise((resolve, reject) => {
+        exec(`yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_dirty`, (err, stdout, stderr) => {
+            if (err) {
+				console.log(err)
+				reject(err)
+			}
+			
+            resolve('Database Backup Created');
+        });
+    })
+}
 
 const fetchAndSaveContent = data => {
     return new Promise((resolve, reject) => {
