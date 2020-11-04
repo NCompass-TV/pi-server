@@ -5,6 +5,8 @@ echo '**N-CompassTV Player Startup Required Update**';
 echo 'Starting Update Process, Please make sure Pi is connected to the internet and avoid turning it off during the process ...';
 sleep 5;
 pm2 stop all;
+echo '=======================Updating NPM=========================';
+sudo npm install -g npm;
 echo '=======================Updating the Pi Server=========================';
 echo 'Creating backup ...';
 cd /home/pi/n-compasstv/pi-server;
