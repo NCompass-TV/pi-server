@@ -37,6 +37,8 @@ then
 else
 	sudo sed -i -e '$aavoid_warnings=1' /boot/config.txt
 fi
+echo '=======================Running Update no Reboot=========================';
+./home/pi/n-compasstv/pi-server/shell/update-no-reboot.sh
 echo 'Update Finished! Pi will now reboot';
 sleep 1;
 echo '5';
@@ -49,4 +51,5 @@ echo '2';
 sleep 1;
 echo '1';
 sleep 1;
+
 reboot;
