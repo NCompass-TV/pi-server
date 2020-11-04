@@ -31,5 +31,4 @@ echo '2';
 sleep 1;
 echo '1';
 sleep 1;
-pm2 restart all;
-killall lxterminal;
+sudo reboot now
