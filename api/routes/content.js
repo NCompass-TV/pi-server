@@ -82,7 +82,7 @@ router.get('/refetch', async(req, res) => {
 
 const getBackupDatabase = () => {
     return new Promise((resolve, reject) => {
-        exec(`yes | cp -rf /home/ubuntu/n-compasstv/db_backup_dirty/_data.db /home/ubuntu/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
+        exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_dirty/_data.db /home/pi/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
             if (err) {
 				console.log(err)
 				reject(err)
