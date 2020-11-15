@@ -21,7 +21,7 @@ initiatePiRestart = async (socket_server) => {
 shutdownPlayer = async () => {
 	console.log('Shutting Down Player')
     return new Promise((resolve, reject) => {
-        exec(`gnome-terminal -- pm2 stop all; sudo reboot now`, (err, stdout, stderr) => {
+        exec(`gnome-terminal -- pm2 stop all; echo 'Restarting in 5'; sleep 5; sudo reboot now`, (err, stdout, stderr) => {
             if (err) {
               console.log(err)
               reject(err)
