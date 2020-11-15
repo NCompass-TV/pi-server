@@ -9,6 +9,28 @@ initiateRemoteUpdate = async (socket_server) => {
     }
 }
 
+initiatePiRestart = async (socket_server) => {
+	try {
+        const update = await restartPi();
+        console.log('#initiatePiRestart: ', update);
+    } catch (err) {
+        console.log('#initiatePiRestart:', err)
+    }
+}
+
+restartPi = async () => {
+	console.log('Pi Restarting')
+    return new Promise((resolve, reject) => {
+        exec(`sudo reboot now`, (err, stdout, stderr) => {
+            if (err) {
+              console.log(err)
+              reject(err)
+            }
+            resolve('Pi Restart Gracefully', stdout);
+        });
+    })
+}
+
 runUpdate = () => {
     console.log('REMOTE UPDATE')
     return new Promise((resolve, reject) => {
