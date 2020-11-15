@@ -44,6 +44,5 @@ runUpdate = () => {
     })
 }
 
-
 exports.initiateRemoteUpdate = initiateRemoteUpdate;
 exports.initiatePiRestart = initiatePiRestart;
