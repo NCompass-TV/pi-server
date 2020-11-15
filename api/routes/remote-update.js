@@ -23,25 +23,12 @@ initiatePiRestart = async (socket_server) => {
 shutdownPlayer = async () => {
 	console.log('Turning Off Player')
     return new Promise((resolve, reject) => {
-        exec(`gnome-terminal -- pm2 stop all`, (err, stdout, stderr) => {
+        exec(`gnome-terminal -- /home/pi/n-compasstv/pi-server/shell/restart-pi.sh`, (err, stdout, stderr) => {
             if (err) {
               console.log(err)
               reject(err)
             }
             resolve('Player is now off, Pi Rebooting', stdout);
-        });
-    })
-}
-
-restartPi = async () => {
-	console.log('Pi Restarting')
-    return new Promise((resolve, reject) => {
-        exec(`sudo reboot now`, (err, stdout, stderr) => {
-            if (err) {
-              console.log(err)
-              reject(err)
-            }
-            resolve('Pi Restart Gracefully', stdout);
         });
     })
 }
