@@ -8,13 +8,16 @@ const path = require('path');
 const path_uri = './public/assets';
 const exec = require('child_process').exec;
 const shelljs = require('shelljs');
+const scrape = require('website-scraper');
+let feed_list = [];
+let download_counter = 0;
 
 router.get('', async (req, res) => {
     try {
 		let io = req.app.get('io');
         let content = await getContent();
         await downloadContent(content, io);
-        res.json(content);
+        res.json({message: "Playlist Contents Downloaded Successfully"});
     } catch(error) {
         console.log('Error in /content', error);
     }
@@ -82,7 +85,7 @@ router.get('/refetch', async(req, res) => {
 
 const getBackupDatabase = () => {
     return new Promise((resolve, reject) => {
-        exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_dirty/_data.db /home/pi/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
+        exec(`yes | cp -rf /home/ubuntu/n-compasstv/db_backup_dirty/_data.db /home/ubuntu/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
             if (err) {
 				console.log(err)
 				reject(err)
@@ -239,46 +242,96 @@ const getContent = () => {
     })
 }
 
-// File Checker and Downloader
 const downloadContent = (content, io) => {
-    let download_counter = 0;
+    download_counter = 0;
+    feed_list = [];
     io.emit('content_to_download', content.length);
     return new Promise ((resolve, reject) => {
-        async.forEach(content, (element, key, callback) => {
-            //1. Check if File already exists in folder.
-            fs.access(`${path_uri}/${element.file_name}`, fs.F_OK, (err) => {
-                if(err) {
-                    // console.log('Downloading')
-                    // 2. If file does not exist, download the file, Set Option for download method.
-                    let options = {
-                        directory: path_uri,
-                        filename: element.file_name
-                    }
-                    
-                    // 3. Run download method with the options set above.
-                    download(element.url, options, (err) => {
-                        if(err) {
-                            // Incase of errors.
-                            console.log(err)
-                        }
+        content.forEach(element => {
 
-                        download_counter++;
-                        // console.log('File Downloaded', element.file_name);
+            // 1. Check if content filetype is feed.
+            if (element.file_type !== 'feed') {
+                fs.access(`${path_uri}/${element.file_name}`, fs.F_OK, (err) => {
+                    if(err) {
+                        // 2. If file does not exist, download the file, Set Option for download method.
+                        let options = {
+                            directory: path_uri,
+                            filename: element.file_name
+                        }
+                        
+                        // 3. Run download method with the options set above.
+                        download(element.url, options, (err) => {
+                            if(err) {
+                                // Incase of errors.
+                                console.log(err)
+                            }
+    
+                            download_counter++;
+                            // console.log('File Downloaded', element.file_name);
+                            io.emit('downloaded_content', download_counter);
+                        })
+                    } else {
+                        download_counter += 1;
                         io.emit('downloaded_content', download_counter);
-                    })
-                } else {
-                    download_counter += 1;
-                    io.emit('downloaded_content', download_counter);
-                    if(download_counter == content.length) {
-                        resolve();
+                        if(download_counter == content.length) {
+                            resolve();
+                        }
                     }
-                }
-            })
-        }, err => {
-            console.log('error', err);
-            console.log('Done');
-            reject(new Error('Download Error'));
+                })
+            } else {
+                fs.access(`${path_uri}/${element.content_id}`, fs.F_OK, async (err) => {
+                    const options = {
+                        urls: [element.url],
+                        directory: `${path_uri}/${element.content_id}/`
+                    };
+
+                    if(err) {
+                        await downloadFeed(options)
+                        download_counter++;
+                        io.emit('downloaded_content', download_counter);
+                        if(download_counter == content.length) {
+                            resolve();
+                        }
+                    } else {
+                        await deleteFeedDir(`${path_uri}/${element.content_id}`)
+                        await downloadFeed(options)
+                        download_counter++;
+                        io.emit('downloaded_content', download_counter);
+                        if(download_counter == content.length) {
+                            resolve();
+                        }
+                    }
+                })
+            }
         })
+    })
+}
+
+deleteFeedDir = (dir) => {
+    return new Promise((resolve, reject) => {
+        fs.rmdir(dir, { recursive: true }, (err) => {
+            if (err) {
+                console.log(err)
+                reject();
+            }
+        
+            console.log(`${dir} is deleted!`)
+            resolve();
+        });
+    })
+}
+
+const downloadFeed = (options) => {
+    return new Promise((resolve, reject) => {
+
+        scrape(options, (error, result) => {
+            if (error) {
+                console.log('#downloadFeedError', error)
+                reject(error);
+            }
+
+            resolve(result.saved)
+        });
     })
 }
 
