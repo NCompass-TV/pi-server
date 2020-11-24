@@ -23,7 +23,7 @@ initiatePiRestart = async (socket_server) => {
 shutdownPlayer = async () => {
 	console.log('Turning Off Player')
     return new Promise((resolve, reject) => {
-        exec(`gnome-terminal -- /home/ubuntu/n-compasstv/pi-server/shell/restart-pi.sh`, (err, stdout, stderr) => {
+        exec(`gnome-terminal -- /home/pi/n-compasstv/pi-server/shell/restart-pi.sh`, (err, stdout, stderr) => {
             if (err) {
               console.log(err)
               reject(err)
@@ -36,7 +36,7 @@ shutdownPlayer = async () => {
 runUpdate = () => {
     console.log('REMOTE UPDATE')
     return new Promise((resolve, reject) => {
-        exec(`gnome-terminal -- /home/ubuntu/n-compasstv/pi-server/shell/remote-update.sh`, (err, stdout, stderr) => {
+        exec(`gnome-terminal -- /home/pi/n-compasstv/pi-server/shell/remote-update.sh`, (err, stdout, stderr) => {
             if (err) {
               console.log(err)
               reject(err)
