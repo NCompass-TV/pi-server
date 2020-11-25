@@ -45,6 +45,50 @@ const checkPlaylistContentTable = () => {
 	})
 }
 
+// Check if Contents Table has Title Column
+const checkFeedTitleColumn = () => {
+	return new Promise((resolve, reject) => {
+		let sql = `PRAGMA table_info(contents)`;
+		db.all(sql, (err, rows) => {
+			if(err) {
+				reject(err);
+			} else {
+				
+				// Column Search
+				let col_exist = rows.filter(
+					i => {
+						return i.name == 'title'
+					}
+				)
+				
+				resolve(col_exist);
+			}
+		})
+	})
+}
+
+// Check if Playlist Contents Table has Duration Column
+const checkPlaylistContentFeedTitleColumn = () => {
+	return new Promise((resolve, reject) => {
+		let sql = `PRAGMA table_info(playlist_contents)`;
+		db.all(sql, (err, rows) => {
+			if(err) {
+				reject(err);
+			} else {
+				
+				// Column Search
+				let col_exist = rows.filter(
+					i => {
+						return i.name == 'title'
+					}
+				)
+				
+				resolve(col_exist);
+			}
+		})
+	})
+}
+
 // Check if Host Table Exists
 const checkHostInfoTable = () => {
 	return new Promise((resolve, reject) => {
@@ -101,11 +145,41 @@ const addDurationColumn = () => {
 	})
 }
 
+const addFeedTitleColumn = () => {
+	return new Promise((resolve, reject) => {
+		let sql = `ALTER TABLE contents ADD COLUMN 'title' TEXT`
+		db.all(sql, (err, rows) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(true)
+			}
+		})
+	})
+}
+
+const addPlaylistContentFeedTitleColumn = () => {
+	return new Promise((resolve, reject) => {
+		let sql = `ALTER TABLE playlist_contents ADD COLUMN 'title' TEXT`
+		db.all(sql, (err, rows) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(true)
+			}
+		})
+	})
+}
+
 module.exports = {
 	checkTemplateTable: checkTemplateTable,
 	addOrderColumnTable: addOrderColumnTable,
 	checkHostInfoTable: checkHostInfoTable,
 	createHostTable: createHostTable,
 	checkPlaylistContentTable: checkPlaylistContentTable,
-	addDurationColumn: addDurationColumn
+	checkFeedTitleColumn: checkFeedTitleColumn,
+	addDurationColumn: addDurationColumn,
+	addFeedTitleColumn: addFeedTitleColumn,
+	addPlaylistContentFeedTitleColumn: addPlaylistContentFeedTitleColumn,
+	checkPlaylistContentFeedTitleColumn: checkPlaylistContentFeedTitleColumn
 }
