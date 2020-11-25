@@ -3,6 +3,7 @@
 
 echo '=======================Updating Pi Electron=======================';
 cd /home/pi/n-compasstv/pi-electron;
+git reset --hard;
 git pull;
 npm install;
 npm update;
