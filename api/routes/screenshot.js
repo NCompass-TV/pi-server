@@ -26,8 +26,11 @@ scheduleScreenshot = async (socket_server) => {
         await deleteScreenshots();
         const license = await getLicense();
         await screenShot();
-        await uploadScreenShot(license.license_id);
-        socket_server.emit('PS_screenshot_uploaded', license);
+	
+	if (license) {
+		await uploadScreenShot(license.license_id);
+		socket_server.emit('PS_screenshot_uploaded', license);
+	}
     } catch(error) {
         console.log('ERROR GETTING SCREENSHOT', error);
         socket_server.emit('PS_screenshot_failed', await getLicense());
