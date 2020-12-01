@@ -11,27 +11,40 @@ router.post('', async(req, res) => {
         saved_data.push(await fetchAndSaveContent(req.body.piContents.contents));
 		saved_data.push(await fetchAndSaveZones(req.body.piContents.screenZonePlaylistsContents));
 		saved_data.push(await saveHostInfo(req.body.piContents.host, req.body.piContents.timezone));
+		const backup_result = await backupDatabase();
+		console.log(backup_result)
         res.json({data_saved: true});
     } catch(error) {
         console.log('Error on /save-data: \n * License is not activated \n * License does not exist \n * License is not assigned ', error);
     }
 })
 
-router.get('/content-play-count', (req, res) => {
-    res.send('Hello')
-})
+const backupDatabase = () => {
+	return new Promise((resolve, reject) => {
+        exec(`yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_dirty`, (err, stdout, stderr) => {
+            if (err) {
+				console.log(err)
+				reject(err)
+			}
+			
+            resolve('Database Backup Created');
+        });
+    })
+}
 
 const fetchAndSaveContent = data => {
+	console.log("fetchAndSave ==================================================", data)
     return new Promise((resolve, reject) => {
         data.forEach(item => {
-            let sql = `INSERT INTO contents (content_id, url, file_type, date_created, host_id, file_name, handler_id) VALUES 
+            let sql = `INSERT INTO contents (content_id, url, file_type, date_created, host_id, file_name, handler_id, title) VALUES 
 			(${sqlstring.escape(item.contentId)}, 
 			${sqlstring.escape(item.url)}, 
 			${sqlstring.escape(item.fileType)}, 
 			${sqlstring.escape(item.dateCreated)}, 
 			${sqlstring.escape(item.hostId)}, 
 			${sqlstring.escape(item.fileName)}, 
-			${sqlstring.escape(item.handlerId)})`;
+			${sqlstring.escape(item.handlerId)},
+			${sqlstring.escape(item.title)})`;
 
             db.all(sql, (err, rows) => {
                 if(err) {
@@ -63,7 +76,7 @@ const fetchAndSaveZones = (data) => {
 			${sqlstring.escape(zone.background)},
 			${sqlstring.escape(zone.playlistId)},
 			${sqlstring.escape(zone.playlistType)},
-			${sqlstring.escape(zone.order)});`;
+			${sqlstring.escape(zone.order)})`;
 
             db.all(sql, (err, rows) => {
                 if('#fetchAndSaveZones', err) {
@@ -114,7 +127,7 @@ const saveHostInfo = async (data, timezone) => {
 // Save Playlist Data
 const savePlaylistData = (zone_playlist_id, content, sequence) => {
     return new Promise((resolve, reject) => {
-		let content_sql = `INSERT INTO playlist_contents (playlist_id, content_id, file_name, url, file_type, handler_id, sequence, is_fullscreen, duration) VALUES 
+		let content_sql = `INSERT INTO playlist_contents (playlist_id, content_id, file_name, url, file_type, handler_id, sequence, is_fullscreen, duration, title) VALUES 
 		(${sqlstring.escape(zone_playlist_id)}, 
 		${sqlstring.escape(content.contentId)}, 
 		${sqlstring.escape(content.fileName)}, 
@@ -123,7 +136,8 @@ const savePlaylistData = (zone_playlist_id, content, sequence) => {
 		${sqlstring.escape(content.handlerId)}, 
 		${sqlstring.escape(sequence)}, 
 		${sqlstring.escape(content.isFullScreen)}, 
-		${sqlstring.escape(content.duration)});`;
+		${sqlstring.escape(content.duration)},
+		${sqlstring.escape(content.title)});`;
 
         db.all(content_sql, (err, rows) => {
             if (err) {

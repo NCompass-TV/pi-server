@@ -57,14 +57,14 @@ const sendLogsOverSocket = async (data) => {
 
 const sendToBroker = async (count) => {
     const payload = [
-        { topic: 'contentPlayCount', messages:JSON.stringify(count), partition: 0 }
+        { topic: 'contentPlayCount', messages:JSON.stringify(count), partition: 2 }
     ];
 
     producer.send(payload, async (err, data) => {
         if (err) {
 			console.log('Unable to send data to broker:', err);
-			await contentPlayCount(data.license_id, data.content_id, data.timestap);
-			console.log('Saved unsent log to database:', data)
+			await contentPlayCount(count.license_id, count.content_id, count.timestap);
+			console.log('Saved unsent log to database:', count)
 		}
 	});
 }

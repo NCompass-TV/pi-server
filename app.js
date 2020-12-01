@@ -39,8 +39,8 @@ const socket_client = require('socket.io-client');
 const to_socket_server = socket_client(socket_server_url);
 
 // Body Parser Middleware
-app.use(body.urlencoded({extended: false}));
-app.use(body.json());
+app.use(express.json({limit: '50mb', extended: true}));
+app.use(express.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
 // CORS Policy
 app.use(cors());
