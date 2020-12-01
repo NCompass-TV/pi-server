@@ -204,28 +204,35 @@ const clearHostInfoTbl = () => {
 }
 
 const clearDir = () => {
-    return new Promise((resolve, reject) => {
-        fs.readdir(path_uri, (err, files) => {
+      // fs.readdir(path_uri, (err, files) => {
+        //     if (err) {
+        //         console.log('#clearDir', err);
+        //         reject(err);
+        //     }
+
+        //     let file_total = files.length;
+        //     let file_deleted = 0; 
+
+        //     for (const file of files) {
+        //         file_deleted++;
+        //         fs.unlinkSync(path.join(path_uri, file))
+
+        //         if (file_deleted == file_total) {
+        //             console.log('All Assets Deleted');
+        //             resolve();
+        //         }
+        //     }
+		// });
+		
+		// Temporary Fix for Content and Directory Deletion inside Public Folder
+		shelljs.exec(`sudo rm -rf ${path_uri}/*`, (err, stdout, stderr) => {
             if (err) {
-                console.log('#clearDir', err);
-                reject(err);   
-                throw err;
-            }
-
-            let file_total = files.length;
-            let file_deleted = 0; 
-
-            for (const file of files) {
-                file_deleted++;
-                fs.unlinkSync(path.join(path_uri, file))
-
-                if (file_deleted == file_total) {
-                    console.log('All Assets Deleted');
-                    resolve();
-                }
-            }
+				console.log(err)
+				reject(err)
+			}
+			
+			resolve();
         });
-    })
 }
 
 // Get Content 
