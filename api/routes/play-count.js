@@ -57,7 +57,7 @@ const sendLogsOverSocket = async (data) => {
 
 const sendToBroker = async (count) => {
     const payload = [
-        { topic: 'contentPlayCount', messages:JSON.stringify(count), partition: 2 }
+        { topic: 'contentPlayCount', messages:JSON.stringify(count), partition: 1 }
     ];
 
     producer.send(payload, async (err, data) => {
