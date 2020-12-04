@@ -204,8 +204,8 @@ const clearHostInfoTbl = () => {
 }
 
 const clearDir = () => {
-	return new Promise((resolve, reject) => {
-      	// fs.readdir(path_uri, (err, files) => {
+    return new Promise((resolve, reject) => {
+        // fs.readdir(path_uri, (err, files) => {
         //     if (err) {
         //         console.log('#clearDir', err);
         //         reject(err);
@@ -227,14 +227,14 @@ const clearDir = () => {
 		
 		// Temporary Fix for Content and Directory Deletion inside Public Folder
 		shelljs.exec(`sudo rm -rf ${path_uri}/*`, (err, stdout, stderr) => {
-			if (err) {
+            if (err) {
 				console.log(err)
 				reject(err)
 			}
 			
 			resolve();
-		});
-	})
+        });
+    })
 }
 
 // Get Content 
