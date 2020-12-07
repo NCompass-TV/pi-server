@@ -15,7 +15,7 @@ router.post('', async(req, res) => {
 		console.log(backup_result)
         res.json({data_saved: true});
     } catch(error) {
-        console.log('Error on /save-data: \n * License is not activated \n * License does not exist \n * License is not assigned ', error);
+		console.log('Error on /save-data: \n * License is not activated \n * License does not exist \n * License is not assigned ', error);
     }
 })
 
@@ -187,6 +187,7 @@ const getHostInfo = () => {
 				reject(err);
 			}
 
+			console.log('#getHostInfo', rows);
 			resolve(rows[0]);
 		})
 	})

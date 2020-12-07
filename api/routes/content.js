@@ -9,6 +9,7 @@ const path_uri = './public/assets';
 const exec = require('child_process').exec;
 const shelljs = require('shelljs');
 const scrape = require('website-scraper');
+const dbfix = require('./dbfix');
 let feed_list = [];
 let download_counter = 0;
 
@@ -40,8 +41,8 @@ router.get('/cleardb', async(req, res) => {
     } catch(error) {
         console.log('#r_cleardb', error);
         res.status(500).send(`#ClearDB Route Error: ${error}`);
-        await getBackupDatabase();
-        await restartPlayer();
+        await dbfix.getBackupDatabase();
+        await dbfix.restartPlayer();
     }
 })
 
@@ -60,8 +61,8 @@ router.get('/reset', async(req, res) => {
     } catch (error) {
         console.log('#r_reset',error);
         res.status(500).send(`#Reset Route Error: ${error}`);
-        await getBackupDatabase();
-        await restartPlayer();
+        await dbfix.getBackupDatabase();
+        await dbfix.restartPlayer();
     }
 })
 
@@ -78,46 +79,46 @@ router.get('/refetch', async(req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send('#refetch - Something went wrong');
-        await getBackupDatabase();
-        await restartPlayer();
+        await dbfix.getBackupDatabase();
+        await dbfix.restartPlayer();
     }
 })
 
-const getBackupDatabase = () => {
-    return new Promise((resolve, reject) => {
-        exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_dirty/_data.db /home/pi/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
-            if (err) {
-				console.log(err)
-				reject(err)
-			}
+// const getBackupDatabase = () => {
+//     return new Promise((resolve, reject) => {
+//         exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_clean/_data.db /home/pi/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
+//             if (err) {
+// 				console.log(err)
+// 				reject(err)
+// 			}
 			
-            resolve('Database Rescued');
-        });
-    })
-}
+//             resolve('Database Rescued');
+//         });
+//     })
+// }
 
-const restartPlayer = () => {
-    console.log('Restarting Player')
+// const restartPlayer = () => {
+//     console.log('Restarting Player')
 
-    return new Promise((resolve, reject) => {
-        shelljs.exec(`pm2 restart app`, (err, stdout, stderr) => {
-            if (err) {
-				console.log(err)
-				reject(err)
-            }
-        });
+//     return new Promise((resolve, reject) => {
+//         shelljs.exec(`pm2 restart app`, (err, stdout, stderr) => {
+//             if (err) {
+// 				console.log(err)
+// 				reject(err)
+//             }
+//         });
 
-        shelljs.exec(`pm2 restart npm`, (err, stdout, stderr) => {
-            if (err) {
-				console.log(err)
-				reject(err)
-            }
+//         shelljs.exec(`pm2 restart npm`, (err, stdout, stderr) => {
+//             if (err) {
+// 				console.log(err)
+// 				reject(err)
+//             }
             
-        });
+//         });
 
-        resolve("Restarting")
-    })
-}
+//         resolve("Restarting")
+//     })
+// }
 
 const clearContentTbl = () => {
     return new Promise((resolve, reject) => {
