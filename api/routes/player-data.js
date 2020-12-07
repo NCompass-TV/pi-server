@@ -5,6 +5,7 @@ const exec = require('child_process').exec;
 const os = require('os');
 const sqlstring = require('sqlstring-sqlite');
 const dbfix = require('../../api/routes/dbfix');
+const remoteupdate = require('./remote-update');
 
 router.post('', async(req, res) => {
     try {
@@ -184,8 +185,7 @@ const getHostInfo = () => {
 		db.all(sql, (err, rows) => {
 			if (err) {
 				console.log('#getOperationHour', err);
-				dbfix.getBackupDatabase();
-				dbfix.restartPlayer();
+				await remoteupdate.initiateRemoteUpdate();
 				reject(err);
 			}
 
