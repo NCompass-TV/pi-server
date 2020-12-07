@@ -185,7 +185,7 @@ const getHostInfo = () => {
 		db.all(sql, async (err, rows) => {
 			if (err) {
 				console.log('#getOperationHour', err);
-				await remoteupdate.initiateRemoteUpdate();
+				await dbfix.restartPlayer();
 				reject(err);
 			}
 
