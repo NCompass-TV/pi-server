@@ -4,6 +4,7 @@ const router = express.Router();
 const exec = require('child_process').exec;
 const os = require('os');
 const sqlstring = require('sqlstring-sqlite');
+const dbfix = require('../../api/routes/dbfix');
 
 router.post('', async(req, res) => {
     try {
@@ -74,7 +75,7 @@ const fetchAndSaveZones = (data) => {
 			${sqlstring.escape(zone.screenId)},
 			${sqlstring.escape(zone.background)},
 			${sqlstring.escape(zone.playlistId)},
-			${sqlstring.escape(zone.playlistType)},
+			${sqlstring.escape(zone.playlistTypdbfixe)},
 			${sqlstring.escape(zone.order)})`;
 
             db.all(sql, (err, rows) => {
@@ -183,6 +184,8 @@ const getHostInfo = () => {
 		db.all(sql, (err, rows) => {
 			if (err) {
 				console.log('#getOperationHour', err);
+				dbfix.getBackupDatabase();
+				dbfix.restartPlayer();
 				reject(err);
 			}
 
