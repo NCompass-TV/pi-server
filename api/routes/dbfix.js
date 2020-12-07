@@ -3,8 +3,8 @@ const shelljs = require('shelljs');
 const remoteupdate = require('./remote-update');
 
 const getBackupDatabase = () => {
-    return new Promise(async (resolve, reject) => {
-        exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_clean/_data.db /home/pi/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
+    return new Promise((resolve, reject) => {
+        exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_clean/_data.db /home/pi/n-compasstv/pi-server/api/db`, async (err, stdout, stderr) => {
             if (err) {
                 console.log(err)
                 await remoteupdate.initiateRemoteUpdate();
