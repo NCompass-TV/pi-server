@@ -20,9 +20,7 @@ fi
 
 if test -d /home/pi/n-compasstv/db_backup_dirty
 then
-	rm -rf /home/pi/n-compasstv/db_backup_dirty;
-	mkdir /home/pi/n-compasstv/db_backup_dirty;
-	echo "DB Dirty Overwritten"
+	echo "DB Dirty Folder is Present"
 else
 	echo "Creating DB Dirty Folder Folder"
 	mkdir /home/pi/n-compasstv/db_backup_dirty;

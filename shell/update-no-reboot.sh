@@ -20,6 +20,17 @@ else
 	sudo sed -i -e '$aavoid_warnings=1' /boot/config.txt
 fi
 
+if test -d /home/pi/n-compasstv/db_backup_dirty
+then
+	rm -rf /home/pi/n-compasstv/db_backup_dirty;
+	rm /home/pi/n-compasstv/db_backup_dirty;
+	mkdir /home/pi/n-compasstv/db_backup_dirty;
+	echo "DB Dirty Overwritten"
+else
+	echo "Creating DB Dirty Folder Folder"
+	mkdir /home/pi/n-compasstv/db_backup_dirty;
+fi
+
 echo 'Update Finished! Player Starting';
 sleep 1;
 echo '5';
