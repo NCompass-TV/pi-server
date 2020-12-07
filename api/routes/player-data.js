@@ -23,7 +23,7 @@ router.post('', async(req, res) => {
 
 const backupDatabase = () => {
 	return new Promise((resolve, reject) => {
-        exec(`yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_dirty`, (err, stdout, stderr) => {
+        exec(`yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_dirty/_data.db`, (err, stdout, stderr) => {
             if (err) {
 				console.log(err)
 				reject(err)
