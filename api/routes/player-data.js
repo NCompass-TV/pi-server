@@ -182,7 +182,7 @@ const checkTimezone = () => {
 const getHostInfo = () => {
 	return new Promise((resolve, reject) => {
 		let sql = `SELECT * FROM host_info`;
-		db.all(sql, (err, rows) => {
+		db.all(sql, async (err, rows) => {
 			if (err) {
 				console.log('#getOperationHour', err);
 				await remoteupdate.initiateRemoteUpdate();
