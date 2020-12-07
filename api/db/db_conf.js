@@ -18,10 +18,11 @@ const getBackupDatabase = () => {
     return new Promise((resolve, reject) => {
         exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_clean/_data.db /home/pi/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
             if (err) {
-				console.log(err)
+				console.log('#getBackupDatabase', err);
 				reject(err)
 			}
 			
+			console.log('#getBackupDatabase: Database Rescued');
             resolve('Database Rescued');
         });
     })
