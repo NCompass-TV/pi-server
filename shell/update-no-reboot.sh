@@ -22,12 +22,12 @@ fi
 
 if test -d /home/pi/n-compasstv/db_backup_dirty
 then
+	echo "DB Dirty is Present"
+else
+	echo "Creating DB Dirty Folder Folder"
 	rm -rf /home/pi/n-compasstv/db_backup_dirty;
 	rm /home/pi/n-compasstv/db_backup_dirty;
 	mkdir /home/pi/n-compasstv/db_backup_dirty;
-	echo "DB Dirty Overwritten"
-else
-	echo "Creating DB Dirty Folder Folder"
 	mkdir /home/pi/n-compasstv/db_backup_dirty;
 fi
 
