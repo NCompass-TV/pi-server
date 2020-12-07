@@ -33,7 +33,6 @@ const backupDatabase = () => {
 }
 
 const fetchAndSaveContent = data => {
-	console.log("fetchAndSave ==================================================", data)
     return new Promise((resolve, reject) => {
         data.forEach(item => {
             let sql = `INSERT INTO contents (content_id, url, file_type, date_created, host_id, file_name, handler_id, title) VALUES 
@@ -186,7 +185,7 @@ const getHostInfo = () => {
 				console.log('#getOperationHour', err);
 				reject(err);
 			}
-			
+
 			resolve(rows[0]);
 		})
 	})
