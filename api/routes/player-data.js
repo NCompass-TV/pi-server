@@ -186,8 +186,7 @@ const getHostInfo = () => {
 				console.log('#getOperationHour', err);
 				reject(err);
 			}
-
-			console.log('#getHostInfo', rows);
+			
 			resolve(rows[0]);
 		})
 	})
