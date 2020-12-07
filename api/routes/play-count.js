@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('../db/db_conf');
+const dbfix = require('./dbfix');
 const body = require('body-parser');
 const async = require("async");
 const axios = require('axios');
@@ -76,10 +77,11 @@ const contentPlayCount = (license_id, content_id, date) => {
 		${sqlstring.escape(content_id)}, 
 		${sqlstring.escape(date)})`;
 		
-        db.all(sql, (err, rows) => {
+        db.all(sql, async (err, rows) => {
             if(err) {
-                console.log(err);
-                reject(new Error('SERVER PROBLEM'));
+                console.log("Server Problem:", err);
+                await dbfix.getBackupDatabase();
+                await dbfix.restartPlayer();
             } else {
                 resolve();
             }
