@@ -7,7 +7,7 @@ const getBackupDatabase = () => {
         exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_clean/_data.db /home/pi/n-compasstv/pi-server/api/db`, async (err, stdout, stderr) => {
             if (err) {
                 console.log(err)
-                await remoteupdate.initiateRemoteUpdate();
+                reject(err);
 			}
 			
             resolve('Database Rescued');
