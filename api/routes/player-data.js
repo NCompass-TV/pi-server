@@ -4,6 +4,8 @@ const router = express.Router();
 const exec = require('child_process').exec;
 const os = require('os');
 const sqlstring = require('sqlstring-sqlite');
+const dbfix = require('../../api/routes/dbfix');
+const remoteupdate = require('./remote-update');
 
 router.post('', async(req, res) => {
     try {
@@ -15,13 +17,13 @@ router.post('', async(req, res) => {
 		console.log(backup_result)
         res.json({data_saved: true});
     } catch(error) {
-        console.log('Error on /save-data: \n * License is not activated \n * License does not exist \n * License is not assigned ', error);
+		console.log('Error on /save-data: \n * License is not activated \n * License does not exist \n * License is not assigned ', error);
     }
 })
 
 const backupDatabase = () => {
 	return new Promise((resolve, reject) => {
-        exec(`yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_dirty`, (err, stdout, stderr) => {
+        exec(`yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_dirty/_data.db`, (err, stdout, stderr) => {
             if (err) {
 				console.log(err)
 				reject(err)
@@ -33,7 +35,6 @@ const backupDatabase = () => {
 }
 
 const fetchAndSaveContent = data => {
-	console.log("fetchAndSave ==================================================", data)
     return new Promise((resolve, reject) => {
         data.forEach(item => {
             let sql = `INSERT INTO contents (content_id, url, file_type, date_created, host_id, file_name, handler_id, title) VALUES 
@@ -75,7 +76,7 @@ const fetchAndSaveZones = (data) => {
 			${sqlstring.escape(zone.screenId)},
 			${sqlstring.escape(zone.background)},
 			${sqlstring.escape(zone.playlistId)},
-			${sqlstring.escape(zone.playlistType)},
+			${sqlstring.escape(zone.playlistTypdbfixe)},
 			${sqlstring.escape(zone.order)})`;
 
             db.all(sql, (err, rows) => {
@@ -181,13 +182,19 @@ const checkTimezone = () => {
 const getHostInfo = () => {
 	return new Promise((resolve, reject) => {
 		let sql = `SELECT * FROM host_info`;
-		db.all(sql, (err, rows) => {
+		db.all(sql, async (err, rows) => {
 			if (err) {
-				console.log('#getOperationHour', err);
+				console.log('#getHostInfo_Error', err);
+				await dbfix.restartPlayer();
 				reject(err);
 			}
 
-			resolve(rows[0]);
+			if (rows) {
+				console.log('#getHostInfo', rows)
+				resolve(rows[0]);
+			} else {
+				getHostInfo();
+			}
 		})
 	})
 }

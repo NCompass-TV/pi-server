@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const db = require('../db/db_conf');
+const dbfix = require('./dbfix');
 const body = require('body-parser');
 const async = require("async");
 const axios = require('axios');
@@ -29,8 +30,8 @@ router.post('', async(req, res) => {
 		if (broker_status_healthy == true) {
 			await sendToBroker(req);
 		} else {
-			console.log('Saved unsent log to database:', req.body)
-			await contentPlayCount(req.body.license_id, req.body.content_id, req.body.timestap);
+			// console.log('Saved unsent log to database:', req.body)
+			// await contentPlayCount(req.body.license_id, req.body.content_id, req.body.timestap);
 		}
 		play_log_data = req;
         res.json({data_saved: true});
@@ -44,8 +45,8 @@ const sendLogsOverSocket = async (data) => {
         if (broker_status_healthy == true) {
             await sendToBroker(data);
         } else {
-            console.log('Saved unsent log to database:', data)
-            await contentPlayCount(data.license_id, data.content_id, data.timestap);
+            // console.log('Saved unsent log to database:', data)
+            // await contentPlayCount(data.license_id, data.content_id, data.timestap);
         }
 
         play_log_data = data;
@@ -63,8 +64,10 @@ const sendToBroker = async (count) => {
     producer.send(payload, async (err, data) => {
         if (err) {
 			console.log('Unable to send data to broker:', err);
-			await contentPlayCount(count.license_id, count.content_id, count.timestap);
-			console.log('Saved unsent log to database:', count)
+			if (count.license_id) {
+				await contentPlayCount(count.license_id, count.content_id, count.timestap);
+			}
+			// console.log('Log unsent:', count)
 		}
 	});
 }
@@ -76,10 +79,11 @@ const contentPlayCount = (license_id, content_id, date) => {
 		${sqlstring.escape(content_id)}, 
 		${sqlstring.escape(date)})`;
 		
-        db.all(sql, (err, rows) => {
+        db.all(sql, async (err, rows) => {
             if(err) {
-                console.log(err);
-                reject(new Error('SERVER PROBLEM'));
+                console.log("Server Problem:", err);
+                await dbfix.getBackupDatabase();
+                await dbfix.restartPlayer();
             } else {
                 resolve();
             }

@@ -3,6 +3,7 @@
 
 echo '=======================Updating Pi Electron=======================';
 cd /home/pi/n-compasstv/pi-electron;
+git reset --hard;
 git pull;
 npm install;
 npm update;
@@ -17,6 +18,17 @@ then
 else
 	echo "Adding Warning Disabled Property"
 	sudo sed -i -e '$aavoid_warnings=1' /boot/config.txt
+fi
+
+if test -d /home/pi/n-compasstv/db_backup_dirty
+then
+	echo "DB Dirty is Present"
+else
+	echo "Creating DB Dirty Folder Folder"
+	rm -rf /home/pi/n-compasstv/db_backup_dirty;
+	rm /home/pi/n-compasstv/db_backup_dirty;
+	mkdir /home/pi/n-compasstv/db_backup_dirty;
+	mkdir /home/pi/n-compasstv/db_backup_dirty;
 fi
 
 echo 'Update Finished! Player Starting';

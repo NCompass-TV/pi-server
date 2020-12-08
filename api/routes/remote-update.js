@@ -13,8 +13,6 @@ initiatePiRestart = async (socket_server) => {
 	try {
 		const off = await shutdownPlayer();
 		console.log('#initiatePiRestart: ', off);
-		const restart = await restartPi();
-		console.log('#initiatePiRestart: ', restart);
     } catch (err) {
         console.log('#initiatePiRestart:', err)
     }
