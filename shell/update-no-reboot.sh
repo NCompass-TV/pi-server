@@ -28,7 +28,6 @@ else
 	rm -rf /home/pi/n-compasstv/db_backup_dirty;
 	rm /home/pi/n-compasstv/db_backup_dirty;
 	mkdir /home/pi/n-compasstv/db_backup_dirty;
-	mkdir /home/pi/n-compasstv/db_backup_dirty;
 fi
 
 echo 'Update Finished! Player Starting';
