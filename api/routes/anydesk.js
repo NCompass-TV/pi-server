@@ -36,7 +36,7 @@ const saveAnydesk = (data) => {
 		anydeskId: data.anydesk
 	}
 
-	axios.post(`${NCOMPASS_API}/license/UpdateAnydeskId`, anydesk_data)
+	axios.post(`${process.env.NCOMPASS_API}/license/UpdateAnydeskId`, anydesk_data)
     .then(res => {
         console.log('AnydeskID Saved', res.status);
     }).catch(err => {

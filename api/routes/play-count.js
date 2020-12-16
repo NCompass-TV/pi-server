@@ -132,7 +132,7 @@ const constructLogs = data => {
 
 const sendLogs = data => {
     if (data.length > 0) {
-        return axios.post(`${NCOMPASS_API}/ContentPlays/Log`, data)
+        return axios.post(`${process.env.NCOMPASS_API}/ContentPlays/Log`, data)
         .then((res) => {
             console.log('Logs Sent to API Server', res.status);
         }).catch((err) => {
