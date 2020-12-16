@@ -84,42 +84,6 @@ router.get('/refetch', async(req, res) => {
     }
 })
 
-// const getBackupDatabase = () => {
-//     return new Promise((resolve, reject) => {
-//         exec(`yes | cp -rf /home/pi/n-compasstv/db_backup_clean/_data.db /home/pi/n-compasstv/pi-server/api/db`, (err, stdout, stderr) => {
-//             if (err) {
-// 				console.log(err)
-// 				reject(err)
-// 			}
-			
-//             resolve('Database Rescued');
-//         });
-//     })
-// }
-
-// const restartPlayer = () => {
-//     console.log('Restarting Player')
-
-//     return new Promise((resolve, reject) => {
-//         shelljs.exec(`pm2 restart app`, (err, stdout, stderr) => {
-//             if (err) {
-// 				console.log(err)
-// 				reject(err)
-//             }
-//         });
-
-//         shelljs.exec(`pm2 restart npm`, (err, stdout, stderr) => {
-//             if (err) {
-// 				console.log(err)
-// 				reject(err)
-//             }
-            
-//         });
-
-//         resolve("Restarting")
-//     })
-// }
-
 const clearContentTbl = () => {
     return new Promise((resolve, reject) => {
         let sql = `DELETE FROM contents;`;
@@ -257,7 +221,7 @@ const downloadContent = (content, io) => {
     feed_list = [];
     io.emit('content_to_download', content.length);
     return new Promise ((resolve, reject) => {
-        content.forEach(element => {
+        content.forEach(async element => {
 
             // 1. Check if content filetype is feed.
             if (element.file_type !== 'feed') {
@@ -289,6 +253,8 @@ const downloadContent = (content, io) => {
                     }
                 })
             } else {
+                await deleteFeedDir(`${path_uri}/${element.content_id}`)
+
                 fs.access(`${path_uri}/${element.content_id}`, fs.F_OK, async (err) => {
                     const options = {
                         urls: [element.url],
@@ -296,19 +262,14 @@ const downloadContent = (content, io) => {
                     };
 
                     if(err) {
-                        await downloadFeed(options)
-                        download_counter++;
-                        io.emit('downloaded_content', download_counter);
-                        if(download_counter == content.length) {
-                            resolve();
-                        }
-                    } else {
-                        await deleteFeedDir(`${path_uri}/${element.content_id}`)
-                        await downloadFeed(options)
-                        download_counter++;
-                        io.emit('downloaded_content', download_counter);
-                        if(download_counter == content.length) {
-                            resolve();
+                        const download_feed = await downloadFeed(options)
+
+                        if (download_feed) {
+                            download_counter++;
+                            io.emit('downloaded_content', download_counter);
+                            if(download_counter == content.length) {
+                                resolve();
+                            }
                         }
                     }
                 })
@@ -333,8 +294,9 @@ deleteFeedDir = (dir) => {
 
 const downloadFeed = (options) => {
     return new Promise((resolve, reject) => {
-
         scrape(options, (error, result) => {
+            console.log('#downloadFeed', options);
+
             if (error) {
                 console.log('#downloadFeedError', error)
                 reject(error);

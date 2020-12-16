@@ -184,13 +184,13 @@ const getHostInfo = () => {
 		let sql = `SELECT * FROM host_info`;
 		db.all(sql, async (err, rows) => {
 			if (err) {
-				console.log('#getHostInfo_Error', err);
+				// console.log('#getHostInfo_Error', err);
 				await dbfix.restartPlayer();
 				reject(err);
 			}
 
 			if (rows) {
-				console.log('#getHostInfo', rows)
+				// console.log('#getHostInfo', rows)
 				resolve(rows[0]);
 			} else {
 				getHostInfo();
