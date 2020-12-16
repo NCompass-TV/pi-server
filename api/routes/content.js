@@ -58,15 +58,6 @@ router.get('/reset', async(req, res) => {
 		let config = await deleteConfigFile();
         await clearDir();
         console.log('Database Cleared', contentTbl, licenseTbl, playlistContentTbl, templateZonesTbl, hostInfoTbl, contentLogs, config);
-
-        console.log('Disconnecting to Socket Server');
-        io.disconnect();
-
-        console.log('Reconnecting to Socket Server');
-        setTimeout(() => {
-            io.connect();
-        }, 3000);
-
         res.json('Pi Reset Successfully');
     } catch (error) {
         console.log('#r_reset',error);
