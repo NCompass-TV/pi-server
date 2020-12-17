@@ -1,6 +1,6 @@
 const exec = require('child_process').exec;
 
-initiateRemoteUpdate = async (socket_server) => {
+initiateRemoteUpdate = async () => {
     try {
         const update = await runUpdate();
         console.log('Updated Successfully', update);
@@ -9,7 +9,7 @@ initiateRemoteUpdate = async (socket_server) => {
     }
 }
 
-initiatePiRestart = async (socket_server) => {
+initiatePiRestart = async () => {
 	try {
 		const off = await shutdownPlayer();
 		console.log('#initiatePiRestart: ', off);
