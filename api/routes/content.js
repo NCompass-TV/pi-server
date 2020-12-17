@@ -303,7 +303,7 @@ const downloadFeed = (options) => {
                 reject(error);
             }
 
-            resolve(result.saved)
+            resolve(true);
         });
     })
 }
