@@ -6,7 +6,7 @@ echo 'Starting Update Process, Please make sure Pi is connected to the internet 
 sleep 5;
 pm2 stop all;
 echo '=======================Updating NPM=========================';
-sudo npm install -g npm;
+sudo n 12;
 echo '=======================Downloading Pi Server Updates=========================';
 cd /home/pi/n-compasstv/pi-server;
 
