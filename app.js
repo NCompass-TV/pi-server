@@ -33,9 +33,7 @@ const server = app.listen(PORT, () => {
 
 // Local Socket IO
 const io = require('socket.io')(server, {
-	cors: {
-		origins: "http://localhost"
-	}
+	origins: ["https://localhost:4200"]
 });
 
 // Local Client Socket Connecting to Socket Server
