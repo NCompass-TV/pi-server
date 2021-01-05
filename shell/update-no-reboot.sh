@@ -6,7 +6,6 @@ cd /home/pi/n-compasstv/pi-electron;
 git reset --hard;
 git pull;
 npm install;
-npm update;
 echo '=======================Updating Pi Player Updates=========================';
 cd /var/www/html;
 git pull;
