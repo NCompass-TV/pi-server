@@ -3,6 +3,7 @@
 
 echo '=======================Updating Pi Electron=======================';
 cd /home/pi/n-compasstv/pi-electron;
+rm package-lock.json
 git reset --hard;
 git pull;
 npm install;
