@@ -30,6 +30,9 @@ else
 	mkdir /home/pi/n-compasstv/db_backup_dirty;
 fi
 
+echo 'Flushing PM2 Logs'
+pm2 flush;
+
 echo 'Update Finished! Player Starting';
 sleep 1;
 echo '5';
