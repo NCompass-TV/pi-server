@@ -1,6 +1,6 @@
 const exec = require('child_process').exec;
 
-initiateRemoteUpdate = async (socket_server) => {
+initiateRemoteUpdate = async () => {
     try {
         const update = await runUpdate();
         console.log('Updated Successfully', update);
@@ -9,7 +9,7 @@ initiateRemoteUpdate = async (socket_server) => {
     }
 }
 
-initiatePiRestart = async (socket_server) => {
+initiatePiRestart = async () => {
 	try {
 		const off = await shutdownPlayer();
 		console.log('#initiatePiRestart: ', off);
@@ -18,7 +18,7 @@ initiatePiRestart = async (socket_server) => {
     }
 }
 
-shutdownPlayer = async () => {
+shutdownPlayer = () => {
 	console.log('Turning Off Player')
     return new Promise((resolve, reject) => {
         exec(`gnome-terminal -- /home/pi/n-compasstv/pi-server/shell/restart-pi.sh`, (err, stdout, stderr) => {

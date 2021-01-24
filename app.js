@@ -32,7 +32,9 @@ const server = app.listen(PORT, () => {
 });
 
 // Local Socket IO
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+	cors: true
+});
 
 // Local Client Socket Connecting to Socket Server
 const socket_client = require('socket.io-client');
