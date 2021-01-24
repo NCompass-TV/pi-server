@@ -7,7 +7,6 @@ rm package-lock.json
 git reset --hard;
 git pull;
 npm install;
-npm update;
 echo '=======================Updating Pi Player Updates=========================';
 cd /var/www/html;
 git pull;

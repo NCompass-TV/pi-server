@@ -38,7 +38,6 @@ cp /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/backup;
 git reset --hard;
 git pull;
 npm install;
-npm update;
 
 echo 'Restoring Pi Server Backup, Please Wait . . .';
 yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_clean;
