@@ -15,7 +15,7 @@ let download_counter = 0;
 
 router.get('', async (req, res) => {
     // Content Route Timeout
-    res.connection?.setTimeout(0);
+    res.connection.setTimeout(0);
     
     try {
 		let io = req.app.get('io');
