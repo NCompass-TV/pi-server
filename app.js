@@ -106,5 +106,5 @@ app.use('/api/content', content);
 app.use('/api/template', template);
 app.use('/api/systeminfo', device_info.router);
 app.use('/api/save-data', save_data.router);
-app.use('/api/save-content-count', content_count.router);
+// app.use('/api/save-content-count', content_count.router);
 app.use('/api/license', pi_license.router);

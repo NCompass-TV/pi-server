@@ -67,7 +67,6 @@ const sendToBroker = async (count) => {
 			if (count.license_id) {
 				await contentPlayCount(count.license_id, count.content_id, count.timestap);
 			}
-			// console.log('Log unsent:', count)
 		}
 	});
 }

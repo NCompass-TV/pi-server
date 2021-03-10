@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs-extra');
 const db = require('../db/db_conf');
 const router = express.Router();
 const exec = require('child_process').exec;
@@ -23,14 +24,16 @@ router.post('', async(req, res) => {
 
 const backupDatabase = () => {
 	return new Promise((resolve, reject) => {
-        exec(`yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_dirty/_data.db`, (err, stdout, stderr) => {
-            if (err) {
-				console.log(err)
-				reject(err)
-			}
-			
-            resolve('Database Backup Created');
-        });
+		fs.ensureDir('/home/pi/n-compasstv/db_backup_dirty', (err) => {
+			exec(`yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_dirty/_data.db`, (err, stdout, stderr) => {
+				if (err) {
+					console.log(err)
+					reject(err)
+				}
+			});
+				
+			resolve('Database Backup Created');
+		})
     })
 }
 

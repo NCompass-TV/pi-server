@@ -24,6 +24,9 @@ router.get('', async (req, res) => {
         res.json({message: "Playlist Contents Downloaded Successfully"});
     } catch(error) {
         console.log('Error in /content', error);
+        res.status(500).send({
+            message: 'Error in Content Route'
+        })
     }
 })
 
@@ -174,26 +177,6 @@ const clearHostInfoTbl = () => {
 
 const clearDir = () => {
     return new Promise((resolve, reject) => {
-        // fs.readdir(path_uri, (err, files) => {
-        //     if (err) {
-        //         console.log('#clearDir', err);
-        //         reject(err);
-        //     }
-
-        //     let file_total = files.length;
-        //     let file_deleted = 0; 
-
-        //     for (const file of files) {
-        //         file_deleted++;
-        //         fs.unlinkSync(path.join(path_uri, file))
-
-        //         if (file_deleted == file_total) {
-        //             console.log('All Assets Deleted');
-        //             resolve();
-        //         }
-        //     }
-		// });
-		
 		// Temporary Fix for Content and Directory Deletion inside Public Folder
 		shelljs.exec(`sudo rm -rf ${path_uri}/*`, (err, stdout, stderr) => {
             if (err) {
@@ -226,7 +209,6 @@ const downloadContent = (content, io) => {
     io.emit('content_to_download', content.length);
     return new Promise ((resolve, reject) => {
         content.forEach(async element => {
-
             // 1. Check if content filetype is feed.
             if (element.file_type !== 'feed') {
                 fs.access(`${path_uri}/${element.file_name}`, fs.F_OK, (err) => {
@@ -260,6 +242,7 @@ const downloadContent = (content, io) => {
                 await deleteFeedDir(`${path_uri}/${element.content_id}`)
 
                 fs.access(`${path_uri}/${element.content_id}`, fs.F_OK, async (err) => {
+
                     const options = {
                         urls: [element.url],
                         directory: `${path_uri}/${element.content_id}/`
@@ -286,7 +269,6 @@ deleteFeedDir = (dir) => {
     return new Promise((resolve, reject) => {
         fs.rmdir(dir, { recursive: true }, (err) => {
             if (err) {
-                console.log(err)
                 reject();
             }
         
