@@ -44,5 +44,19 @@ runUpdate = () => {
     })
 }
 
+upgradeToV2 = () => {
+    console.log('Upgrade to V2');
+    return new Promise((resolve, reject) => {
+        exec(`gnome-terminal -- /home/pi/n-compasstv/pi-server/shell/upgrade-to-v2.sh`, (err, stdout, stderr) => {
+            if (err) {
+              console.log(err)
+              reject(err)
+            }
+            resolve('V2 Player Installer Running', stdout);
+        });
+    })
+}
+
 exports.initiateRemoteUpdate = initiateRemoteUpdate;
 exports.initiatePiRestart = initiatePiRestart;
+exports.upgradeToV2 = upgradeToV2;
