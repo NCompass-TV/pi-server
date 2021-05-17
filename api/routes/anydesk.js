@@ -1,5 +1,6 @@
 const exec = require('child_process').exec;
 const axios = require('axios');
+const environment = require('../../environment/environment');
 
 const getAnydeskId = () => {
     console.log('GET ANYDESK ID');
@@ -36,7 +37,7 @@ const saveAnydesk = (data) => {
 		anydeskId: data.anydesk
 	}
 
-	axios.post(`${process.env.NCOMPASS_API}/license/UpdateAnydeskId`, anydesk_data)
+	axios.post(`${environment.api_base_url}/license/UpdateAnydeskId`, anydesk_data)
     .then(res => {
         console.log('AnydeskID Saved', res.status);
     }).catch(err => {
