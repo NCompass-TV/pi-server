@@ -5,7 +5,8 @@ const path = require('path');
 const sc_path = './public/screenshots';
 const form_data = require('form-data');
 const axios = require("axios");
-const screenshot_url = `${process.env.NCOMPASS_API}/pi/upload?licenseid=`;
+const environment = require('../../environment/environment');
+const screenshot_url = `${environment.api_base_url}/pi/upload?licenseid=`;
 
 launchScreenshot = async (socket_server) => {
     console.log('LAUNCHED!!!')

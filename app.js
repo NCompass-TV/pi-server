@@ -12,6 +12,8 @@ const cors = require('cors');
 const body = require('body-parser');
 const app = express();
 
+const environment = require('./environment/environment');
+
 // Modules
 const PORT = process.env.PORT;
 const content = require('./api/routes/content');
@@ -20,8 +22,8 @@ const device_info = require('./api/routes/device');
 const pi_license = require('./api/routes/license');
 const playlist_seq = require('./api/routes/playlist');
 const save_data = require('./api/routes/player-data');
-const socket_server_url = process.env.SOCKET_SERVER;
 const template = require('./api/routes/template');
+
 
 // Hotfix for Possible Memory Leak
 require('events').EventEmitter.defaultMaxListeners = Infinity;
@@ -38,7 +40,7 @@ const io = require('socket.io')(server, {
 
 // Local Client Socket Connecting to Socket Server
 const socket_client = require('socket.io-client');
-const to_socket_server = socket_client(socket_server_url);
+const to_socket_server = socket_client(environment.socket_url);
 
 // Body Parser Middleware
 app.use(express.json({limit: '50mb', extended: true}));

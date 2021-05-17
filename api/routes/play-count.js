@@ -5,6 +5,7 @@ const dbfix = require('./dbfix');
 const body = require('body-parser');
 const async = require("async");
 const axios = require('axios');
+const environment = require('../../environment/environment');
 const router = express.Router();
 const sqlstring = require('sqlstring-sqlite');
 const kafka = require('kafka-node');
@@ -132,7 +133,7 @@ const constructLogs = data => {
 
 const sendLogs = data => {
     if (data.length > 0) {
-        return axios.post(`${process.env.NCOMPASS_API}/ContentPlays/Log`, data)
+        return axios.post(`${environment.api_base_url}/ContentPlays/Log`, data)
         .then((res) => {
             console.log('Logs Sent to API Server', res.status);
         }).catch((err) => {
