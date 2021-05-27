@@ -40,7 +40,10 @@ const io = require('socket.io')(server, {
 
 // Local Client Socket Connecting to Socket Server
 const socket_client = require('socket.io-client');
-const to_socket_server = socket_client(environment.socket_url);
+const to_socket_server = socket_client(environment.socket_url, {
+	query: 'client=Player',
+	transports: ['websocket'],
+});
 
 // Body Parser Middleware
 app.use(express.json({limit: '50mb', extended: true}));
