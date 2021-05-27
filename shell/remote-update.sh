@@ -5,8 +5,6 @@ echo '**Welcome to the N-Compass TV Pi System Update**';
 echo 'Starting Update Process, Please make sure Pi is connected to the internet and avoid turning it off during the process ...';
 sleep 5;
 pm2 stop all;
-echo '=======================Updating NPM=========================';
-sudo npm install -g npm;
 echo '=======================Downloading Pi Server Updates=========================';
 cd /home/pi/n-compasstv/pi-server;
 
@@ -40,7 +38,6 @@ cp /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/backup;
 git reset --hard;
 git pull;
 npm install;
-npm update;
 
 echo 'Restoring Pi Server Backup, Please Wait . . .';
 yes | cp -rf /home/pi/n-compasstv/pi-server/api/db/_data.db /home/pi/n-compasstv/db_backup_clean;
