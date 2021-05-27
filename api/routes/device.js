@@ -9,13 +9,18 @@ router.get('', async (req, res) => {
         let macaddress = await getInternet();
         let internetspeed = await getLatency();
         let storage = await getStorage();
-    
+        let appVersion = {
+            server: "1.9.1",
+            ui: "1.9.1"
+        }
+
         return res.json({
             memory,
             internettype,
             macaddress,
             storage,
-            internetspeed
+            internetspeed,
+            appVersion
         });
     } catch(error) {
         console.log(error);
