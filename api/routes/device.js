@@ -11,7 +11,7 @@ router.get('', async (req, res) => {
         let storage = await getStorage();
         let appVersion = {
             server: "1.9.1",
-            ui: "1.9.1"
+            ui: "1.9.2"
         }
 
         return res.json({
